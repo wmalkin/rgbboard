@@ -54,7 +54,8 @@ var frames = [];
 setInterval(function() {
 	if (frames.length) {
 		var frame = frames.shift();
-		console.log(frame);
+		// console.log(frame);
+		ClearPixels(pixelData);
 		WriteFrame(frame, pixelData);
 		ws281x.render(pixelData);
 	} else {
@@ -64,6 +65,11 @@ setInterval(function() {
 }, 1000 / FPS);
 
 
+
+function ClearPixels(pixels) {
+	for (var i = 0; i < pixels.length; i++)
+		pixels[i] = 0;
+}
 
 
 //
