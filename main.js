@@ -50,7 +50,7 @@ function WriteFrame(frame, pixels) {
 }
 
 function WriteFrameFill(frame, pixels) {
-	var color = IntColor(frame.fill);
+	var color = frame.fill;
 	for (var i = 0; i < pixels.length; i++)
 		pixels[i] = color;
 }
