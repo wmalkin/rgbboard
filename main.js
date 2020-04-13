@@ -86,8 +86,8 @@ console.log('Press <ctrl>+C to exit.');
 // for (var i = 0; i < 256; i++)
 // 	frames.push({fill: colorwheel(i)});
 
-for (var i = 0; i < 200; i++)
-	frames.push({fill: colorwheel(i)});
+for (var i = 0; i < 1024; i += 4)
+	frames.push({fill: colorwheel(i % 256)});
 
 
 setTimeout(function() {
