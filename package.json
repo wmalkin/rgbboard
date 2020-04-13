@@ -1,0 +1,22 @@
+{
+  "name": "rgbboard",
+  "version": "1.0.0",
+  "description": "RGB LED matrix board",
+  "main": "board.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wmalkin/rgbboard.git"
+  },
+  "author": "Wayne Malkin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wmalkin/rgbboard/issues"
+  },
+  "homepage": "https://github.com/wmalkin/rgbboard#readme",
+  "dependencies": {
+    "rpi-ws281x-native": "^0.9.0"
+  }
+}
