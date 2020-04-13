@@ -156,7 +156,7 @@ for (var x = 0; x < 16; x++) {
 	for (var y = 0; y < 16; y++) {
 		var fr = { rows: [] };
 		fr.rows[x] = [];
-		fr.rows[x][y] = colorwheel(0);
+		fr.rows[x][y] = colorwheel(x*16+y);
 		frames.push(fr);
 	}
 }
