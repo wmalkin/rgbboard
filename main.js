@@ -25,7 +25,7 @@ for (var x = 0; x < 16; x++) {
 	for (var y = 0; y < 16; y++) {
 		var i = x;
 		if ((y % 2) == 1)
-			i = 16 - i;
+			i = 15 - i;
 		i += y * 16;
 		rowmap[x][y] = i;
 		colmap[y][x] = i;
