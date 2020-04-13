@@ -1,4 +1,4 @@
-var ws281x = require('../lib/ws281x-native');
+var ws281x = require('ws281x-native');
 
 var NUM_LEDS = 256,
     pixelData = new Uint32Array(NUM_LEDS);
