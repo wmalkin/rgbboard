@@ -7,7 +7,7 @@ var ws281x = require('rpi-ws281x-native'),
 	_ = require('underscore');
 
 var NUM_LEDS = 256,
-	FPS = 5,
+	FPS = 30,
     pixelData = new Uint32Array(NUM_LEDS);
 
 ws281x.init(NUM_LEDS);
