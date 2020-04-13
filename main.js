@@ -149,6 +149,7 @@ console.log('Press <ctrl>+C to exit.');
 for (var x = 0; x < 16; x++) {
 	for (var y = 0; y < 16; y++) {
 		var fr = { rows: [] };
+		fr.rows[x] = [];
 		fr.rows[x][y] = colorwheel(0);
 		frames.push(fr);
 	}
