@@ -13,6 +13,27 @@ var NUM_LEDS = 256,
 ws281x.init(NUM_LEDS);
 
 
+var rowmap = [],
+	colmap = [],
+	indexmap = [];
+
+for (var i = 0; i < 16; i++) {
+	rowmap.push([]);
+	colmap.push([]);
+}
+for (var x = 0; x < 16; x++) {
+	for (var y = 0; y < 16; y++) {
+		var i = x;
+		if ((y % 2) == 1)
+			i = 16 - i;
+		i += y * 16;
+		rowmap[x][y] = i;
+		colmap[y][x] = i;
+		indexmap[i] = [x,y];
+	}
+}
+
+
 // exit cleanly with a cleared board
 function CleanExit() {
 	ws281x.reset();
@@ -66,6 +87,20 @@ function WriteFrameFill(frame, pixels) {
 		pixels[i] = color;
 }
 
+function WriteFrameRows(frame, pixels) {
+	for (var x = 0; x < frame.rows.length) {
+		var row = frame.rows[x];
+		for (var y = 0; y < row.length; y++) {
+			if (row[y] != null) {
+				var i = rowmap[x][y];
+				var color = row[y];
+				pixels[i] = color;
+			}
+		}
+	}
+}
+
+
 /*
 
 // ---- animation-loop
@@ -86,8 +121,14 @@ console.log('Press <ctrl>+C to exit.');
 // for (var i = 0; i < 256; i++)
 // 	frames.push({fill: colorwheel(i)});
 
-for (var i = 0; i < 1024; i += 4)
-	frames.push({fill: colorwheel(i % 256)});
+for (var i = 0; i < 1024; i += 4) {
+	var row = [], fr = { rows: [] };
+	for (var y = 0; y < 16; y++)
+		row.push((i % 256) + (y*5));
+	for (var i = 0; i < 16; i++)
+		fr.rows.push(row);
+	frames.push(fr);
+}
 
 
 setTimeout(function() {
