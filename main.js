@@ -165,7 +165,7 @@ for (var x = 0; x < 16; x++) {
 
 setTimeout(function() {
 	CleanExit();
-}, 30000);
+}, 120000);
 
 
 
