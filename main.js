@@ -86,13 +86,13 @@ console.log('Press <ctrl>+C to exit.');
 // for (var i = 0; i < 256; i++)
 // 	frames.push({fill: colorwheel(i)});
 
-for (var i = 0; i < FPS; i++)
-	frames.push({fill: colorwheel(i*10)});
+for (var i = 0; i < 200; i++)
+	frames.push({fill: colorwheel(i)});
 
 
 setTimeout(function() {
 	CleanExit();
-}, 5000);
+}, 30000);
 
 
 
