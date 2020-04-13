@@ -88,7 +88,7 @@ function WriteFrameFill(frame, pixels) {
 }
 
 function WriteFrameRows(frame, pixels) {
-	for (var x = 0; x < frame.rows.length) {
+	for (var x = 0; x < frame.rows.length; x++) {
 		var row = frame.rows[x];
 		for (var y = 0; y < row.length; y++) {
 			if (row[y] != null) {
