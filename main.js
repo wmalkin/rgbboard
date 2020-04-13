@@ -12,16 +12,22 @@ var NUM_LEDS = 256,
 
 ws281x.init(NUM_LEDS);
 
+
+// exit cleanly with a cleared board
+function CleanExit() {
+	ws281x.reset();
+	process.nextTick(function () { process.exit(0); });
+}
 // ---- trap the SIGINT and reset before exit
 process.on('SIGINT', function () {
-  ws281x.reset();
-  process.nextTick(function () { process.exit(0); });
+	CleanExit();
 });
 
 
 
 //
-// 
+// Manage the writing of frames to the board
+//
 var frames = [];
 
 setInterval(function() {
@@ -29,8 +35,13 @@ setInterval(function() {
 		var frame = frames.shift();
 		WriteFrame(frame, pixelData);
 		ws281x.render(pixelData);
+	} else {
+		// no frames left -- terminate
+		CleanExit();
 	}
 }, 1000 / FPS);
+
+
 
 
 //
