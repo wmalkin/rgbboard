@@ -54,6 +54,7 @@ var frames = [];
 setInterval(function() {
 	if (frames.length) {
 		var frame = frames.shift();
+		console.log(frame);
 		WriteFrame(frame, pixelData);
 		ws281x.render(pixelData);
 	} else {
@@ -121,14 +122,26 @@ console.log('Press <ctrl>+C to exit.');
 // for (var i = 0; i < 256; i++)
 // 	frames.push({fill: colorwheel(i)});
 
-for (var i = 0; i < 1024; i += 4) {
-	var row = [], fr = { rows: [] };
-	for (var y = 0; y < 16; y++)
-		row.push((i % 256) + (y*5));
-	for (var i = 0; i < 16; i++)
-		fr.rows.push(row);
+
+
+// for (var i = 0; i < 1024; i += 4) {
+// 	var row = [], fr = { rows: [] };
+// 	for (var y = 0; y < 16; y++)
+// 		row.push((i % 256) + (y*5));
+// 	for (var i = 0; i < 16; i++)
+// 		fr.rows.push(row);
+// 	frames.push(fr);
+// }
+
+
+var fr = { rows: [] };
+var row = [];
+for (var i = 0; i < 16; i++)
+	row.push(i*5);
+for (var i = 0; i < 16; i++)
+	fr.rows.push(row);
+for (var i = 0; i < 30; i++)
 	frames.push(fr);
-}
 
 
 setTimeout(function() {
