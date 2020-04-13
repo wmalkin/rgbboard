@@ -87,7 +87,7 @@ console.log('Press <ctrl>+C to exit.');
 // 	frames.push({fill: colorwheel(i)});
 
 for (var i = 0; i < FPS; i++)
-	frames.push({fill: colorwheel(0)});
+	frames.push({fill: colorwheel(i*10)});
 
 
 setTimeout(function() {
