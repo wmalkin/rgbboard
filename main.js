@@ -91,11 +91,13 @@ function WriteFrameFill(frame, pixels) {
 function WriteFrameRows(frame, pixels) {
 	for (var x = 0; x < frame.rows.length; x++) {
 		var row = frame.rows[x];
-		for (var y = 0; y < row.length; y++) {
-			if (row[y] != null) {
-				var i = rowmap[x][y];
-				var color = row[y];
-				pixels[i] = color;
+		if (row != null) {
+			for (var y = 0; y < row.length; y++) {
+				if (row[y] != null) {
+					var i = rowmap[x][y];
+					var color = row[y];
+					pixels[i] = color;
+				}
 			}
 		}
 	}
@@ -134,14 +136,24 @@ console.log('Press <ctrl>+C to exit.');
 // }
 
 
-var fr = { rows: [] };
-var row = [];
-for (var i = 0; i < 16; i++)
-	row.push(colorwheel(i*5));
-for (var i = 0; i < 16; i++)
-	fr.rows.push(row);
-for (var i = 0; i < 30; i++)
-	frames.push(fr);
+// var fr = { rows: [] };
+// var row = [];
+// for (var i = 0; i < 16; i++)
+// 	row.push(colorwheel(i*5));
+// for (var i = 0; i < 16; i++)
+// 	fr.rows.push(row);
+// for (var i = 0; i < 30; i++)
+// 	frames.push(fr);
+
+
+for (var x = 0; x < 16; x++) {
+	for (var y = 0; y < 16; y++) {
+		var fr = { rows: [] };
+		fr.rows[x][y] = colorwheel(0);
+		frames.push(fr);
+	}
+}
+
 
 
 setTimeout(function() {
