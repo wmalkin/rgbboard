@@ -137,7 +137,7 @@ console.log('Press <ctrl>+C to exit.');
 var fr = { rows: [] };
 var row = [];
 for (var i = 0; i < 16; i++)
-	row.push(i*5);
+	row.push(colorwheel(i*5));
 for (var i = 0; i < 16; i++)
 	fr.rows.push(row);
 for (var i = 0; i < 30; i++)
