@@ -195,6 +195,7 @@ function RenderFrameFill(frame, pixels) {
 }
 
 function RenderFrameRows(frame, pixels) {
+	console.log("renderframe", frame.rows[0][0]);
 	for (var x = 0; x < frame.rows.length; x++) {
 		var row = frame.rows[x];
 		if (row != null) {
