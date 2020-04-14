@@ -222,6 +222,7 @@ function Check2(c1, c2) {
 		c1 = c2;
 		c2 = t;
 	}
+	return fr;
 }
 
 
