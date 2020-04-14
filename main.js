@@ -47,94 +47,18 @@ process.on('SIGINT', function () {
 
 
 //
-// Manage the writing of frames to the board
+// Render color specifiers to an int
 //
-var frames = [];
-
-setInterval(function() {
-	if (frames.length) {
-		var frame = frames.shift();
-		// console.log(frame);
-		ClearPixels(pixelData);
-		WriteFrame(frame, pixelData);
-		ws281x.render(pixelData);
-	} else {
-		// no frames left -- terminate
-		CleanExit();
-	}
-}, 1000 / FPS);
-
-
-
-function ClearPixels(pixels) {
-	for (var i = 0; i < pixels.length; i++)
-		pixels[i] = 0;
-}
-
-
-//
-// Write a frame to a pixel array
-// Handles each method to express a frame in terms of pixels, rows, columns, etc.
-//
-// TODO: Should be extensible with transform functions
-//
-function WriteFrame(frame, pixels) {
-	if (_.isArray(frame.rows)) {
-		WriteFrameRows(frame, pixels);
-	}
-	if (_.isArray(frame.cols)) {
-		WriteFrameCols(frame, pixels);
-	}
-	if (frame.fill != null) {
-		WriteFrameFill(frame, pixels);
-	}
-}
-
-function WriteFrameFill(frame, pixels) {
-	var color = ToColor(frame.fill);
-	for (var i = 0; i < pixels.length; i++)
-		pixels[i] = color;
-}
-
-function WriteFrameRows(frame, pixels) {
-	for (var x = 0; x < frame.rows.length; x++) {
-		var row = frame.rows[x];
-		if (row != null) {
-			for (var y = 0; y < row.length; y++) {
-				if (row[y] != null && row[y] != 0) {
-					var i = rowmap[x][y];
-					var color = ToColor(row[y]);
-					pixels[i] = color;
-				}
-			}
-		}
-	}
-}
-
-function WriteFrameCols(frame, pixels) {
-	for (var y = 0; y < frame.cols.length; y++) {
-		var col = frame.cols[y];
-		if (col != null) {
-			for (var x = 0; x < col.length; x++) {
-				if (col[x] != null) {
-					var i = colmap[x][y];
-					var color = ToColor(col[x]);
-					pixels[i] = color;
-				}
-			}
-		}
-	}
-}
-
-
 function ToColor(pv) {
 	if (_.isObject(pv)) {
 		if (pv.r != null)
 			return rgb2Int(pv.r, pv.g, pv.b);
 		if (pv.h != null)
 			return HSV(pv.h, pv.s, pv.v);
-		if (pv.hue)
+		if (pv.hue != null)
 			return colorwheel(pv.hue);
+		if (pv.c != null)
+			return pv.c;
 	} else {
 		return pv;
 	}
@@ -184,6 +108,37 @@ function HSV(h, s, v) {
 
 
 //
+// Manage the writing of frames to the board at the correct frame rate
+//
+var frames = [];
+
+setInterval(function() {
+	if (frames.length) {
+		var frame = frames.shift();
+		// console.log(frame);
+		ClearPixels(pixelData);
+		RenderFrame(frame, pixelData);
+		ws281x.render(pixelData);
+	} else {
+		// no frames left -- terminate
+		CleanExit();
+	}
+}, 1000 / FPS);
+
+
+//
+// Functions to build pixel array
+//
+
+// Initialize an array of pixels to all "off"
+function ClearPixels(pixels) {
+	for (var i = 0; i < pixels.length; i++)
+		pixels[i] = 0;
+}
+
+
+
+//
 // Functions to build frames
 //
 
@@ -208,33 +163,202 @@ function RowFrame() {
 }
 
 
-// 2x2 checkerboard
-function Check2(c1, c2) {
-	var fr = RowFrame();
-	for (var x = 0; x < 16; x += 2) {
-		for (var y = 0; y < 16; y += 2) {
-			fr.rows[x][y] = c1;
-			fr.rows[x][y+1] = c1;
-			fr.rows[x+1][y] = c1;
-			fr.rows[x+1][y+1] = c1;
+
+//
+// Render a frame to a pixel array
+// Handles each method to express a frame in terms of pixels, rows, columns, etc.
+//
+// TODO: Should be extensible with transform functions
+//
+function RenderFrame(frame, pixels) {
+	if (_.isArray(frame.rows)) {
+		RenderFrameRows(frame, pixels);
+	}
+	if (_.isArray(frame.cols)) {
+		RenderFrameCols(frame, pixels);
+	}
+	if (frame.fill != null) {
+		RenderFrameFill(frame, pixels);
+	}
+}
+
+function RenderFrameFill(frame, pixels) {
+	var color = ToColor(frame.fill);
+	for (var i = 0; i < pixels.length; i++)
+		pixels[i] = color;
+}
+
+function RenderFrameRows(frame, pixels) {
+	for (var x = 0; x < frame.rows.length; x++) {
+		var row = frame.rows[x];
+		if (row != null) {
+			for (var y = 0; y < row.length; y++) {
+				if (row[y] != null && row[y] != 0) {
+					var i = rowmap[x][y];
+					var color = ToColor(row[y]);
+					pixels[i] = color;
+				}
+			}
 		}
-		var t = c1;
-		c1 = c2;
-		c2 = t;
+	}
+}
+
+function RenderFrameCols(frame, pixels) {
+	for (var y = 0; y < frame.cols.length; y++) {
+		var col = frame.cols[y];
+		if (col != null) {
+			for (var x = 0; x < col.length; x++) {
+				if (col[x] != null) {
+					var i = colmap[x][y];
+					var color = ToColor(col[x]);
+					pixels[i] = color;
+				}
+			}
+		}
+	}
+}
+
+
+
+//
+// Functions to make pattern frames
+//
+
+// 2x2 checkerboard
+function CheckFrame(c1, c2, size) {
+	var fr = RowFrame();
+	for (var x = 0; x < (16/size); x++) {
+		for (var y = 0; y < (16/size); y++) {
+			var c = (x % 2 == y % 2) ? c1 : c2;
+			for (var x1 = 0; x1 < size; x1++)
+				for (var y1 = 0; y1 < size; y1++)
+					fr.rows[x*size+x1][y*size+y1] = c;
+		}
 	}
 	return fr;
 }
 
 
+function TestCheck2Frame() {
+for (var hue = 0; hue < 256; hue++) {
+		var c1 = { hue: hue },
+			c2 = { hue: 255-hue };
+		frames.push(CheckFrame(c1, c2, 2));
+	}
+}
+
+
+function TestCheck4Frame() {
+for (var hue = 0; hue < 256; hue++) {
+		var c1 = { hue: hue },
+			c2 = { hue: 255-hue };
+		frames.push(CheckFrame(c1, c2, 4));
+	}
+}
+
+
+//
+// Set up key-frame animations
+//
+var keyFrames = [];
+var lastKeyFrame = Matrix({h: 0, s: 0, v: 0});
+
+
+setInterval(function() {
+	// check if another key-frame animation is needed
+	if (frames.length < 30 && keyFrames.length > 0) {
+		// grab next key frame pair and animate
+		var nextKeyFrame = keyFrames.shift();
+		FrameAnimate(lastKeyFrame, nextKeyFrame, nextKeyFrame.count || FPS);
+		lastKeyFrame = nextKeyFrame;
+	}
+}, 100);
+
+
+
+function FrameAnimate(kf1, kf2, n) {
+	for (var i = 1; i <= n; i++) {
+		var fr = FrameGradient(kf1, kf2, i, n);
+		frames.push(fr);
+	}
+}
+
+
+function ColorAt(fr, x, y) {
+	if (fr.fill != null)
+		return fr.fill;
+	if (fr.rows != null)
+		return fr.rows[x][y];
+	if (fr.cols != null)
+		return fr.cols[y][x];
+}
+
+
+function FrameGradient(f1, f2, numer, denom) {
+	if (f1.fill != null && f2.fill != null) {
+		// Special case: gradient over fill
+		return { fill: ColorGradient(f1.fill, f2.fill, numer, denom) }
+	}
+	var fr = {rows: []};
+	for (var x = 0; x < 16; x++) {
+		fr.rows.push([]);
+		for (var y = 0; y < 16; y++) {
+			var c1 = ColorAt(f1, x, y),
+				c2 = ColorAt(f2, x, y);
+			fr.rows[x].push(ColorGradient(c1, c2, numer, denom));
+		}
+	}
+	return fr;
+}
+
+
+function ColorGradient(c1, c2, numer, denom) {
+	var fr = {};
+	AttrGradient(c1, c2, fr, "hue", numer, denom);
+	AttrGradient(c1, c2, fr, "r", numer, denom);
+	AttrGradient(c1, c2, fr, "g", numer, denom);
+	AttrGradient(c1, c2, fr, "b", numer, denom);
+	AttrGradient(c1, c2, fr, "h", numer, denom);
+	AttrGradient(c1, c2, fr, "s", numer, denom);
+	AttrGradient(c1, c2, fr, "v", numer, denom);
+	return fr;
+}
+
+
+function AttrGradient(obj1, obj2, rs, attr, numer, denom) {
+	if (obj1[attr] != null && obj2[attr] != null)
+		rs[attr] = IntGradient(obj1[attr], obj2[attr], numer, denom);
+}
+
+
+function IntGradient(i1, i2, numer, denom) {
+	return (i2 - i1) * numer / denom + i1;
+}
+
+
+
+function TestKeyFrames() {
+	keyFrames.push({hue: 60});
+	keyFrames.push({hue: 120});
+	keyFrames.push({hue: 180});
+	keyFrames.push({hue: 120});
+	keyFrames.push({hue: 150});
+	keyFrames.push({hue: 160});
+	keyFrames.push({hue: 100});
+	keyFrames.push({hue: 0});
+}
+
+
+
 //
 // Main test animation
 //
-for (var hue = 0; hue < 256; hue++) {
-	var c1 = { hue: hue },
-		c2 = { hue: 255-hue };
-	frames.push(Check2(c1, c2));
-}
-// for (var x = 0; x < 16; x += 2) {
+TestKeyFrames();
+
+
+
+
+	// for (var x = 0; x < 16; x += 2) {
 // 	for (var y = 0; y < 16; y += 2) {
 // 		var fr = { rows: [] };
 // 		var c = { h: x*16+y, s: 255, v: 128 };
