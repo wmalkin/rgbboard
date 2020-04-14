@@ -266,6 +266,7 @@ var lastKeyFrame = Matrix({h: 0, s: 0, v: 0});
 
 setInterval(function() {
 	// check if another key-frame animation is needed
+	console.log("check key frames: ", frames.length, keyFrames.length);
 	if (frames.length < 30 && keyFrames.length > 0) {
 		// grab next key frame pair and animate
 		var nextKeyFrame = keyFrames.shift();
@@ -355,6 +356,7 @@ function TestKeyFrames() {
 // Main test animation
 //
 TestKeyFrames();
+console.log(keyFrames.length);
 
 
 
