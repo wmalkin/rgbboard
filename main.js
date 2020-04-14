@@ -264,17 +264,21 @@ var keyFrames = [];
 var lastKeyFrame = Matrix({h: 0, s: 0, v: 0});
 
 
-setInterval(function() {
-	// check if another key-frame animation is needed
-	console.log("check key frames: ", frames.length, keyFrames.length);
-	if (frames.length < 30 && keyFrames.length > 0) {
-		// grab next key frame pair and animate
-		var nextKeyFrame = keyFrames.shift();
-		console.log("Animate from " + lastKeyFrame + " to " + nextKeyFrame);
-		FrameAnimate(lastKeyFrame, nextKeyFrame, nextKeyFrame.count || FPS);
-		lastKeyFrame = nextKeyFrame;
-	}
-}, 100);
+function StartFrameRenderer() {
+	setInterval(function() {
+		// check if another key-frame animation is needed
+		console.log("check key frames: ", frames.length, keyFrames.length);
+		if (frames.length < 30 && keyFrames.length > 0) {
+			// grab next key frame pair and animate
+			var nextKeyFrame = keyFrames.shift();
+			console.log("Animate from " + lastKeyFrame + " to " + nextKeyFrame);
+			FrameAnimate(lastKeyFrame, nextKeyFrame, nextKeyFrame.count || FPS);
+			lastKeyFrame = nextKeyFrame;
+		}
+	}, 100);
+}
+
+setTimeout(StartFrameRenderer, 250);
 
 
 
