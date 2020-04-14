@@ -351,8 +351,8 @@ function TestKeyFrames() {
 	keyFrames.push({ fill: {h: 180, s: 255, v: 255}});
 	keyFrames.push({ fill: {h: 150, s: 255, v: 255}});
 	keyFrames.push({ fill: {h: 240, s: 255, v: 255}});
-	keyFrames.push({ fill: {h: 240, s: 40, v: 255}});
-	keyFrames.push({ fill: {h: 120, s: 255, v: 128}});
+	// keyFrames.push({ fill: {h: 240, s: 40, v: 255}});
+	// keyFrames.push({ fill: {h: 120, s: 255, v: 128}});
 	// keyFrames.push({hue: 120});
 	// keyFrames.push({hue: 180});
 	// keyFrames.push({hue: 120});
