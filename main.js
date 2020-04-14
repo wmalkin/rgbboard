@@ -269,6 +269,7 @@ setInterval(function() {
 	if (frames.length < 30 && keyFrames.length > 0) {
 		// grab next key frame pair and animate
 		var nextKeyFrame = keyFrames.shift();
+		console.log("Animate from " + lastKeyFrame + " to " + nextKeyFrame);
 		FrameAnimate(lastKeyFrame, nextKeyFrame, nextKeyFrame.count || FPS);
 		lastKeyFrame = nextKeyFrame;
 	}
