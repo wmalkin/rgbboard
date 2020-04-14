@@ -274,7 +274,6 @@ var lastKeyFrame = { fill: {h: 0, s: 0, v: 0}};
 function StartKeyFrameRenderer() {
 	setInterval(function() {
 		// check if another key-frame animation is needed
-		console.log("check key frames: ", frames.length, keyFrames.length);
 		if (frames.length < 30 && keyFrames.length > 0) {
 			// grab next key frame pair and animate
 			console.log("Key frame animation...", frames.length, keyFrames.length);
@@ -318,7 +317,6 @@ function FrameGradient(f1, f2, numer, denom) {
 		for (var y = 0; y < 16; y++) {
 			var c1 = ColorAt(f1, x, y),
 				c2 = ColorAt(f2, x, y);
-			console.log(c1, c2);
 			fr.rows[x].push(ColorGradient(c1, c2, numer, denom));
 		}
 	}
@@ -353,6 +351,8 @@ function TestKeyFrames() {
 	keyFrames.push({ fill: {h: 180, s: 255, v: 255}});
 	keyFrames.push({ fill: {h: 150, s: 255, v: 255}});
 	keyFrames.push({ fill: {h: 240, s: 255, v: 255}});
+	keyFrames.push({ fill: {h: 240, s: 40, v: 255}});
+	keyFrames.push({ fill: {h: 120, s: 255, v: 128}});
 	// keyFrames.push({hue: 120});
 	// keyFrames.push({hue: 180});
 	// keyFrames.push({hue: 120});
