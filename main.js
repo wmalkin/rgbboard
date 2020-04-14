@@ -349,6 +349,10 @@ function IntGradient(i1, i2, numer, denom) {
 
 function TestKeyFrames() {
 	keyFrames.push({ fill: {h: 60, s: 255, v: 255}});
+	keyFrames.push({ fill: {h: 120, s: 255, v: 255}});
+	keyFrames.push({ fill: {h: 180, s: 255, v: 255}});
+	keyFrames.push({ fill: {h: 150, s: 255, v: 255}});
+	keyFrames.push({ fill: {h: 240, s: 255, v: 255}});
 	// keyFrames.push({hue: 120});
 	// keyFrames.push({hue: 180});
 	// keyFrames.push({hue: 120});
