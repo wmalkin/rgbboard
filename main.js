@@ -346,16 +346,25 @@ function IntGradient(i1, i2, numer, denom) {
 
 
 function TestKeyFrames() {
-	keyFrames.push({ fill: {h: 60, s: 255, v: 255}});
-	keyFrames.push({ fill: {h: 120, s: 255, v: 255}});
-	keyFrames.push({ fill: {h: 180, s: 255, v: 255}});
-	keyFrames.push({ fill: {h: 150, s: 255, v: 255}});
-	keyFrames.push({ fill: {h: 240, s: 255, v: 255}});
-	keyFrames.push({ fill: {h: 60, s: 255, v: 255}});
-	keyFrames.push({ fill: {h: 120, s: 255, v: 255}});
-	keyFrames.push({ fill: {h: 180, s: 255, v: 255}});
-	keyFrames.push({ fill: {h: 150, s: 255, v: 255}});
-	keyFrames.push({ fill: {h: 240, s: 255, v: 255}});
+	var c1 = {h: 60, s: 255, v: 255},
+		c2 = {h: 120, s: 255, v: 255};
+
+	keyFrames.push({ fill: c1});
+	keyFrames.push({ fill: c2});
+
+	keyFrames.push(CheckFrame(c1, c2, 2));
+	keyFrames.push(CheckFrame(c2, c1, 2));
+	keyFrames.push(CheckFrame(c1, c2, 2));
+	keyFrames.push(CheckFrame(c2, c1, 2));
+
+	// keyFrames.push({ fill: {h: 180, s: 255, v: 255}});
+	// keyFrames.push({ fill: {h: 150, s: 255, v: 255}});
+	// keyFrames.push({ fill: {h: 240, s: 255, v: 255}});
+	// keyFrames.push({ fill: {h: 60, s: 255, v: 255}});
+	// keyFrames.push({ fill: {h: 120, s: 255, v: 255}});
+	// keyFrames.push({ fill: {h: 180, s: 255, v: 255}});
+	// keyFrames.push({ fill: {h: 150, s: 255, v: 255}});
+	// keyFrames.push({ fill: {h: 240, s: 255, v: 255}});
 	// keyFrames.push({ fill: {h: 240, s: 40, v: 255}});
 	// keyFrames.push({ fill: {h: 120, s: 255, v: 128}});
 	// keyFrames.push({hue: 120});
