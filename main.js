@@ -203,7 +203,7 @@ function Matrix(c) {
 // empty row-wise frame
 function RowFrame() {
 	return {
-		rows: Matrix(0);
+		rows: Matrix(0)
 	}
 }
 
