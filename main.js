@@ -318,6 +318,7 @@ function FrameGradient(f1, f2, numer, denom) {
 		for (var y = 0; y < 16; y++) {
 			var c1 = ColorAt(f1, x, y),
 				c2 = ColorAt(f2, x, y);
+			console.log(c1, c2);
 			fr.rows[x].push(ColorGradient(c1, c2, numer, denom));
 		}
 	}
