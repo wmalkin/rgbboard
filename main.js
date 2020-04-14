@@ -152,11 +152,15 @@ console.log('Press <ctrl>+C to exit.');
 // 	frames.push(fr);
 
 
-for (var x = 0; x < 16; x++) {
-	for (var y = 0; y < 16; y++) {
+for (var x = 0; x < 16; x += 2) {
+	for (var y = 0; y < 16; y += 2) {
 		var fr = { rows: [] };
 		fr.rows[x] = [];
+		fr.rows[x+1] = [];
 		fr.rows[x][y] = colorwheel(x*16+y);
+		fr.rows[x][y+1] = colorwheel(x*16+y);
+		fr.rows[x+1][y] = colorwheel(x*16+y);
+		fr.rows[x+1][y+1] = colorwheel(x*16+y);
 		frames.push(fr);
 	}
 }
