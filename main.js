@@ -51,12 +51,8 @@ process.on('SIGINT', function () {
 //
 function ToColor(pv) {
 	if (_.isObject(pv)) {
-		if (pv.r != null)
-			return rgb2Int(pv.r, pv.g, pv.b);
 		if (pv.h != null)
 			return HSV(pv.h, pv.s, pv.v);
-		if (pv.hue != null)
-			return colorwheel(pv.hue);
 		if (pv.c != null)
 			return pv.c;
 	} else {
@@ -65,6 +61,12 @@ function ToColor(pv) {
 }
 
 
+//
+// Range of HSV allowed values:
+//   h: 0-360
+//   s: 0-255
+//   v: 0-255
+//
 function HSV(h, s, v) {
     var r = 0,
     	g = 0,
@@ -245,8 +247,8 @@ function CheckFrame(c1, c2, size) {
 
 function TestCheck2Frame() {
 for (var hue = 0; hue < 256; hue++) {
-		var c1 = { hue: hue },
-			c2 = { hue: 255-hue };
+		var c1 = { h: hue, s: 255, v: 128 },
+			c2 = { h: 255-hue, s: 255, v: 128 };
 		frames.push(CheckFrame(c1, c2, 2));
 	}
 }
@@ -254,8 +256,8 @@ for (var hue = 0; hue < 256; hue++) {
 
 function TestCheck4Frame() {
 for (var hue = 0; hue < 256; hue++) {
-		var c1 = { hue: hue },
-			c2 = { hue: 255-hue };
+		var c1 = { h: hue, s: 255, v: 128 },
+			c2 = { h: 255-hue, s: 255, v: 128 };
 		frames.push(CheckFrame(c1, c2, 4));
 	}
 }
@@ -274,8 +276,8 @@ function StartKeyFrameRenderer() {
 		console.log("check key frames: ", frames.length, keyFrames.length);
 		if (frames.length < 30 && keyFrames.length > 0) {
 			// grab next key frame pair and animate
+			console.log("Key frame animation...", frames.length, keyFrames.length);
 			var nextKeyFrame = keyFrames.shift();
-			console.log("Animate from " + lastKeyFrame + " to " + nextKeyFrame);
 			FrameAnimate(lastKeyFrame, nextKeyFrame, nextKeyFrame.count || FPS);
 			lastKeyFrame = nextKeyFrame;
 		}
@@ -324,10 +326,6 @@ function FrameGradient(f1, f2, numer, denom) {
 
 function ColorGradient(c1, c2, numer, denom) {
 	var fr = {};
-	AttrGradient(c1, c2, fr, "hue", numer, denom);
-	AttrGradient(c1, c2, fr, "r", numer, denom);
-	AttrGradient(c1, c2, fr, "g", numer, denom);
-	AttrGradient(c1, c2, fr, "b", numer, denom);
 	AttrGradient(c1, c2, fr, "h", numer, denom);
 	AttrGradient(c1, c2, fr, "s", numer, denom);
 	AttrGradient(c1, c2, fr, "v", numer, denom);
@@ -348,14 +346,14 @@ function IntGradient(i1, i2, numer, denom) {
 
 
 function TestKeyFrames() {
-	keyFrames.push({hue: 60});
-	keyFrames.push({hue: 120});
-	keyFrames.push({hue: 180});
-	keyFrames.push({hue: 120});
-	keyFrames.push({hue: 150});
-	keyFrames.push({hue: 160});
-	keyFrames.push({hue: 100});
-	keyFrames.push({hue: 0});
+	keyFrames.push({h: 60, s: 255, v: 255});
+	// keyFrames.push({hue: 120});
+	// keyFrames.push({hue: 180});
+	// keyFrames.push({hue: 120});
+	// keyFrames.push({hue: 150});
+	// keyFrames.push({hue: 160});
+	// keyFrames.push({hue: 100});
+	// keyFrames.push({hue: 0});
 }
 
 
