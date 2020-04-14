@@ -81,15 +81,15 @@ function ClearPixels(pixels) {
 function WriteFrame(frame, pixels) {
 	if (_.isArray(frame.rows)) {
 		WriteFrameRows(frame, pixels);
-	} else if (_.isArray(frame.cols)) {
+	if (_.isArray(frame.cols)) {
 		WriteFrameCols(frame, pixels);
-	} else if (frame.fill != null) {
+	if (frame.fill != null) {
 		WriteFrameFill(frame, pixels);
 	}
 }
 
 function WriteFrameFill(frame, pixels) {
-	var color = frame.fill;
+	var color = ToColor(frame.fill);
 	for (var i = 0; i < pixels.length; i++)
 		pixels[i] = color;
 }
@@ -99,15 +99,108 @@ function WriteFrameRows(frame, pixels) {
 		var row = frame.rows[x];
 		if (row != null) {
 			for (var y = 0; y < row.length; y++) {
-				if (row[y] != null) {
+				if (row[y] != null && row[y] != 0) {
 					var i = rowmap[x][y];
-					var color = row[y];
+					var color = ToColor(row[y]);
 					pixels[i] = color;
 				}
 			}
 		}
 	}
 }
+
+function WriteFrameCols(frame, pixels) {
+	for (var y = 0; y < frame.cols.length; y++) {
+		var col = frame.cols[y];
+		if (col != null) {
+			for (var x = 0; x < col.length; x++) {
+				if (col[x] != null) {
+					var i = colmap[x][y];
+					var color = ToColor(col[x]);
+					pixels[i] = color;
+				}
+			}
+		}
+	}
+}
+
+
+function ToColor(pv) {
+	if (_.isObject(pv)) {
+		if (pv.r != null)
+			return rgb2Int(pv.r, pv.g, pv.b);
+		if (pv.h != null)
+			return HSV(pv.h, pv.s, pv.v);
+		if (pv.hue)
+			return colorwheel(pv.hue);
+	} else {
+		return pv;
+	}
+}
+
+
+function HSV(h, s, v) {
+    var r = 0,
+    	g = 0,
+    	b = 0;
+    if (h < 60) {
+        r = 255;
+        g = h * 255 / 60;
+    } else if (h < 120) {
+        g = 255;
+        r = (120 - h) * 255 / 60;
+    } else if (h < 180) {
+        g = 255;
+        b = (h - 120) * 255 / 60;
+    } else if (h < 240) {
+        b = 255;
+        g = (240 - h) * 255 / 60;
+    } else if (h < 300) {
+        b = 255;
+        r = (h - 240) * 255 / 60;
+    } else {
+        r = 255;
+        b = (360 - h) * 255 / 60;
+    }
+    // Scale to same total luminance; assumes each colour is similarly bright
+    var lum = r + g + b;
+    r = r * 255 / lum;
+    g = g * 255 / lum;
+    b = b * 255 / lum;
+    
+    // Scale for saturation and value
+    var minv = (255 - s) * v / 255;
+    var maxv = v;
+    
+    red = r * (maxv - minv) / 255 + minv;
+    green = g * (maxv - minv) / 255 + minv;
+    blue = b * (maxv - minv) / 255 + minv;
+
+    return rgb2Int(red, green, blue);
+}
+
+
+
+//
+// Main test animation
+//
+
+for (var x = 0; x < 16; x += 2) {
+	for (var y = 0; y < 16; y += 2) {
+		var fr = { rows: [] };
+		var c = { h: x*16+y, s: 255, v: 128 };
+
+		fr.rows[x] = [];
+		fr.rows[x+1] = [];
+		fr.rows[x][y] = c;
+		fr.rows[x][y+1] = c;
+		fr.rows[x+1][y] = c;
+		fr.rows[x+1][y+1] = c;
+		frames.push(fr);
+	}
+}
+
+
 
 
 /*
@@ -150,20 +243,6 @@ console.log('Press <ctrl>+C to exit.');
 // 	fr.rows.push(row);
 // for (var i = 0; i < 30; i++)
 // 	frames.push(fr);
-
-
-for (var x = 0; x < 16; x += 2) {
-	for (var y = 0; y < 16; y += 2) {
-		var fr = { rows: [] };
-		fr.rows[x] = [];
-		fr.rows[x+1] = [];
-		fr.rows[x][y] = colorwheel(x*16+y);
-		fr.rows[x][y+1] = colorwheel(x*16+y);
-		fr.rows[x+1][y] = colorwheel(x*16+y);
-		fr.rows[x+1][y+1] = colorwheel(x*16+y);
-		frames.push(fr);
-	}
-}
 
 
 
