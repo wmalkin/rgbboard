@@ -184,23 +184,69 @@ function HSV(h, s, v) {
 
 
 //
-// Main test animation
+// Functions to build frames
 //
 
-for (var x = 0; x < 16; x += 2) {
-	for (var y = 0; y < 16; y += 2) {
-		var fr = { rows: [] };
-		var c = { h: x*16+y, s: 255, v: 128 };
+// 16x16 matrix fill
+function Matrix(c) {
+	var rs = [];
+	for (var i = 0; i < 16; i++) {
+		var row = [];
+		for (var j = 0; j < 16; j++)
+			row.push(c);
+		rs.push(row);
+	}
+	return rs;
+}
 
-		fr.rows[x] = [];
-		fr.rows[x+1] = [];
-		fr.rows[x][y] = c;
-		fr.rows[x][y+1] = c;
-		fr.rows[x+1][y] = c;
-		fr.rows[x+1][y+1] = c;
-		frames.push(fr);
+
+// empty row-wise frame
+function RowFrame() {
+	return {
+		rows: Matrix(0);
 	}
 }
+
+
+// 2x2 checkerboard
+function Check2(c1, c2) {
+	var fr = RowFrame();
+	for (var x = 0; x < 16; x += 2) {
+		for (var y = 0; y < 16; y += 2) {
+			fr.rows[x][y] = c1;
+			fr.rows[x][y+1] = c1;
+			fr.rows[x+1][y] = c1;
+			fr.rows[x+1][y+1] = c1;
+		}
+		var t = c1;
+		c1 = c2;
+		c2 = t;
+	}
+}
+
+
+//
+// Main test animation
+//
+for (var hue = 0; hue < 256; hue++) {
+	var c1 = { hue: hue },
+		c2 = { hue: 255-hue };
+	frames.push(Check2(c1, c2));
+}
+// for (var x = 0; x < 16; x += 2) {
+// 	for (var y = 0; y < 16; y += 2) {
+// 		var fr = { rows: [] };
+// 		var c = { h: x*16+y, s: 255, v: 128 };
+
+// 		fr.rows[x] = [];
+// 		fr.rows[x+1] = [];
+// 		fr.rows[x][y] = c;
+// 		fr.rows[x][y+1] = c;
+// 		fr.rows[x+1][y] = c;
+// 		fr.rows[x+1][y+1] = c;
+// 		frames.push(fr);
+// 	}
+// }
 
 
 
