@@ -81,8 +81,10 @@ function ClearPixels(pixels) {
 function WriteFrame(frame, pixels) {
 	if (_.isArray(frame.rows)) {
 		WriteFrameRows(frame, pixels);
+	}
 	if (_.isArray(frame.cols)) {
 		WriteFrameCols(frame, pixels);
+	}
 	if (frame.fill != null) {
 		WriteFrameFill(frame, pixels);
 	}
