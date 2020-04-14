@@ -112,18 +112,22 @@ function HSV(h, s, v) {
 //
 var frames = [];
 
-setInterval(function() {
-	if (frames.length) {
-		var frame = frames.shift();
-		// console.log(frame);
-		ClearPixels(pixelData);
-		RenderFrame(frame, pixelData);
-		ws281x.render(pixelData);
-	} else {
-		// no frames left -- terminate
-		CleanExit();
-	}
-}, 1000 / FPS);
+function StartFrameRenderer() {
+	setInterval(function() {
+		if (frames.length) {
+			var frame = frames.shift();
+			// console.log(frame);
+			ClearPixels(pixelData);
+			RenderFrame(frame, pixelData);
+			ws281x.render(pixelData);
+		} else {
+			// no frames left -- terminate
+			CleanExit();
+		}
+	}, 1000 / FPS);
+}
+
+setTimeout(StartFrameRenderer, 250);
 
 
 //
@@ -264,7 +268,7 @@ var keyFrames = [];
 var lastKeyFrame = Matrix({h: 0, s: 0, v: 0});
 
 
-function StartFrameRenderer() {
+function StartKeyFrameRenderer() {
 	setInterval(function() {
 		// check if another key-frame animation is needed
 		console.log("check key frames: ", frames.length, keyFrames.length);
@@ -278,7 +282,7 @@ function StartFrameRenderer() {
 	}, 100);
 }
 
-setTimeout(StartFrameRenderer, 250);
+setTimeout(StartKeyFrameRenderer, 50);
 
 
 
