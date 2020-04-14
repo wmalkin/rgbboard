@@ -268,7 +268,7 @@ for (var hue = 0; hue < 256; hue++) {
 // Set up key-frame animations
 //
 var keyFrames = [];
-var lastKeyFrame = Matrix({h: 0, s: 0, v: 0});
+var lastKeyFrame = { fill: {h: 0, s: 0, v: 0}};
 
 
 function StartKeyFrameRenderer() {
@@ -326,11 +326,11 @@ function FrameGradient(f1, f2, numer, denom) {
 
 
 function ColorGradient(c1, c2, numer, denom) {
-	var fr = {};
-	AttrGradient(c1, c2, fr, "h", numer, denom);
-	AttrGradient(c1, c2, fr, "s", numer, denom);
-	AttrGradient(c1, c2, fr, "v", numer, denom);
-	return fr;
+	var rs = {};
+	AttrGradient(c1, c2, rs, "h", numer, denom);
+	AttrGradient(c1, c2, rs, "s", numer, denom);
+	AttrGradient(c1, c2, rs, "v", numer, denom);
+	return rs;
 }
 
 
